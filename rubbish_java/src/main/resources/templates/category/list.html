@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>分类-垃圾分类系统</title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/category/css/list.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/category/js/list.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>分类列表</h2>
+    </div>
+    <div class="search-box">
+        <form action="/category/list" method="post">
+	        <input name="name" th:value="${name}">
+	        <input name="p" type="hidden">
+	        <button type="submit" class="btn">查询</button>
+	        <a href="/category/addPage">添加分类</a>
+        </form>
+    </div>
+    <div class="table-box">
+        <div class="table-head">
+            <span>图片</span>
+            <span>名称</span>
+            <span>描述</span>
+            <span>指导</span>
+            <span>排序</span>
+            <span>操作</span>
+        </div>
+        <div class="table-body">
+            <div class="row" th:each="item : ${list}">
+                <span>
+                    <a th:href="${item.img}" target="_blank">
+                        <img th:src="${item.img}"/>
+                    </a>
+                </span>
+                <span th:text="${item.name}"></span>
+                <span th:text="${item.des}"></span>
+                <span th:text="${item.guide}"></span>
+                <span th:text="${item.order_}"></span>
+                <span>
+                    <a th:href="@{'/category/updatePage?dbid='+${item.dbid}}">编辑</a>
+                    <a href="javascript:;" class="delete-btn" th:data-dbid="${item.dbid}">删除</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="pagination">
+        <div class="pagination-inner">
+            <my:pagelink ></my:pagelink>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

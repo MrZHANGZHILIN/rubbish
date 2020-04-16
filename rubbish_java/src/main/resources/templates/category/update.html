@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/category/css/update.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/category/js/update.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>修改菜品</h2>
+    </div>
+    <div class="form-outer-box">
+        <div class="form-box">
+            <div class="row">
+                <span class="lbl">名称：</span>
+                <input name="name" class="inp" th:value="${entity.name}">
+            </div>
+            <div class="row">
+                <span class="lbl">描述：</span>
+                <textarea name="des" rows="3" cols="50" th:text="${entity.des}"></textarea>
+            </div>
+            <div class="row">
+                <span class="lbl">指导：</span>
+                <textarea name="guide" rows="10" cols="50" th:text="${entity.guide}"></textarea>
+            </div>
+            <div class="row">
+                <span class="lbl">排序：</span>
+                <input name="order" class="inp" th:value="${entity.order}">
+                <span>*大于0的整数</span>
+            </div>
+            <div class="row row-img">
+                <span class="lbl">图片：</span>
+                <div class="img-outer-box">
+                    <input type="file">
+	                <div class="img-box">
+	                    <div class="content">
+	                        <img th:src="${entity.img}">
+	                    </div>
+	                </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <input name="dbid" type="hidden" th:value="${entity.dbid}">
+                <a href="javascript:;" class="btn sub-btn">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

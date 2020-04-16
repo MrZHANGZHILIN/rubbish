@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.llb.mapper.CategoryMapper">
+	<resultMap id="categoryResultMap" type="com.llb.entity.Category">
+	  <result property="order" column="order_" />
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="dbid">
+		insert into category(
+		     name,
+		     img,
+		     des,
+		     guide,
+		     order_
+		     )
+		values (
+		     #{name},
+		     #{img},
+		     #{des},
+		     #{guide},
+		     #{order}
+		     )
+	</insert>
+	<!-- 修改-->
+	<update id="update">
+		update category set 
+		    name = #{name},
+		    img = #{img},
+		    des = #{des},
+		    guide = #{guide},
+		    order_ = #{order}
+		    where dbid = #{dbid}
+	</update>
+	<select id="findByDbid" resultMap="categoryResultMap">
+		select * from category where dbid=#{dbid}
+	</select>
+	<!-- 通用查询 -->
+	<select id="find" resultMap="categoryResultMap">
+		select * from category 
+		<where>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+		</where> 
+		order by order_ asc
+	</select>
+	<!-- 查询 -->
+	<select id="query" resultType="hashmap">
+		select * from category
+		<where>
+			<if test="name != null and name != ''">
+				and name like concat('%', #{name}, '%')
+			</if>
+		</where>
+		order by order_ asc 
+		<if test="pu != null">
+			 limit #{pu.index},#{pu.pageSize}
+	    </if>
+	</select>
+	<!-- 获取记录数 -->
+	<select id="totalCount" resultType="long">
+		select count(*) from category
+		<where>
+			<if test="name != null and name != ''">
+				and name like concat('%', #{name}, '%')
+			</if>
+		</where>		
+	</select>
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from category 
+		<where>
+		    <if test="dbids != null and dbids != ''">
+		        dbid in 
+			    <foreach item="item" index="index" collection="dbids"
+                  open="(" separator="," close=")">
+                  #{item}
+                </foreach>
+		    </if>
+		</where>
+	</delete>
+</mapper>

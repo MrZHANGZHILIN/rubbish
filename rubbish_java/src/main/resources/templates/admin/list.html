@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>管理员-点餐系统</title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/admin/css/list.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/admin/js/list.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>管理员列表</h2>
+    </div>
+    <div class="search-box">
+        <form action="/admin/list" method="post">
+	        <input name="loginId" th:value="${loginId}">
+	        <button type="submit" class="btn">查询</button>
+	        <a href="/admin/addPage">添加管理员</a>
+        </form>
+    </div>
+    <div class="table-box">
+        <div class="table-head">
+            <span>账号</span>
+            <span>状态</span>
+            <span>操作</span>
+        </div>
+        <div class="table-body">
+            <div class="row" th:each="admin : ${list}">
+                <span th:text="${admin.loginId}"></span>
+                <span th:text="${admin.status == 0}? '正常':'禁用'"></span>
+                <span>
+                    <a th:href="@{'/admin/updatePage?dbid='+${admin.dbid}}">编辑</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="pagination">
+        <div class="pagination-inner">
+            <my:pagelink ></my:pagelink>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

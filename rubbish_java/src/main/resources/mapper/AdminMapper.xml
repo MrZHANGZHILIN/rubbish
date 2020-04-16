@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.llb.mapper.AdminMapper">
+	<resultMap id="adminResultMap" type="com.llb.entity.Admin">
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="dbid">
+		insert into admin(
+		     loginId,
+		     password,
+		     status
+		     )
+		values (
+		     #{loginId},
+		     #{password},
+		     #{status}
+		     )
+	</insert>
+	<!-- 修改-->
+	<update id="update">
+		update admin set 
+		    loginId = #{loginId},
+		    password = #{password},
+		    status = #{status}
+		    where dbid = #{dbid}
+	</update>
+	<select id="findByDbid" resultMap="adminResultMap">
+		select * from admin where dbid=#{dbid}
+	</select>
+	<select id="findByLoginId" resultMap="adminResultMap">
+		select * from admin where loginId=#{loginId}
+	</select>
+	<!-- 查询 -->
+	<select id="query" resultType="hashmap">
+		select * from admin
+		<where>
+			<if test="loginId != null and loginId != ''">
+				and loginId like concat('%', #{loginId}, '%')
+			</if>
+		</where>
+		order by dbid desc 
+		<if test="pu != null">
+			 limit #{pu.index},#{pu.pageSize}
+	    </if>
+	</select>
+	<!-- 获取记录数 -->
+	<select id="totalCount" resultType="long">
+		select count(*) from admin
+		<where>
+			<if test="loginId != null and loginId != ''">
+				and loginId like concat('%', #{loginId}, '%')
+			</if>
+		</where>		
+	</select>
+</mapper>

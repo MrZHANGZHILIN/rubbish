@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.llb.mapper.RubbishMapper">
+	<resultMap id="rubbishResultMap" type="com.llb.entity.Rubbish">
+	  
+	</resultMap>
+	<!-- 插入 -->
+	<insert id="insert" useGeneratedKeys="true" keyProperty="dbid">
+		insert into rubbish(
+		     name,
+		     categoryId,
+		     hot
+		     )
+		values (
+		     #{name},
+		     #{categoryId},
+		     #{hot}
+		     )
+	</insert>
+	<!-- 修改-->
+	<update id="update">
+		update rubbish set 
+		    name = #{name},
+		    categoryId = #{categoryId},
+		    hot = #{hot}
+		    where dbid = #{dbid}
+	</update>
+	<select id="findByDbid" resultMap="rubbishResultMap">
+		select * from rubbish where dbid=#{dbid}
+	</select>
+	<select id="findByName" resultMap="rubbishResultMap">
+		select * from rubbish where name=#{name}
+	</select>
+	<!-- 通用查询 -->
+	<select id="find" resultMap="rubbishResultMap">
+		select * from rubbish 
+		<where>
+			<if test="name != null and name != ''">
+				and name = #{name}
+			</if>
+			<if test="hot != null and hot != ''">
+				and hot = #{hot}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and name like concat('%', #{keyword} , '%')
+			</if>
+		</where> 
+		order by dbid desc
+	</select>
+	<!-- 查询 -->
+	<select id="query" resultType="hashmap">
+		select a.*, b.name categoryName from rubbish a
+		left join category b on a.categoryId = b.dbid
+		<where>
+			<if test="name != null and name != ''">
+				and a.name like concat('%', #{name} , '%')
+			</if>
+		</where>
+		order by a.dbid desc 
+		<if test="pu != null">
+			 limit #{pu.index},#{pu.pageSize}
+	    </if>
+	</select>
+	<!-- 获取记录数 -->
+	<select id="totalCount" resultType="long">
+		select count(*) from rubbish
+		<where>
+			<if test="name != null and name != ''">
+				and name like concat('%', #{name} , '%')
+			</if>
+		</where>		
+	</select>
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from rubbish 
+		<where>
+		    <if test="dbids != null and dbids != ''">
+		        dbid in 
+			    <foreach item="item" index="index" collection="dbids"
+                  open="(" separator="," close=")">
+                  #{item}
+                </foreach>
+		    </if>
+		</where>
+	</delete>
+</mapper>

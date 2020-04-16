@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="<%=basePath%>/" />
+<title></title>
+<link href="<%=basePath%>/source/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="<%=basePath%>/view/category/css/add.css" rel="stylesheet" type="text/css"/>
+<script src="<%=basePath%>/source/js/jquery-2.1.1.min.js" type="text/javascript"></script>
+<link href="<%=basePath%>/source/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" >
+<script src="<%=basePath%>/source/sweetalert2/dist/sweetalert2.min.js"></script>
+<script src="<%=basePath%>/view/category/js/add.js" type="text/javascript"></script>
+<script type="text/javascript">
+function getBasePath(){
+    return '<%=basePath%>';
+ }
+</script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>添加分类</h2>
+    </div>
+    <div class="form-outer-box">
+        <div class="form-box">
+            <div class="row">
+                <span class="lbl">名称：</span>
+                <input name="name" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">描述：</span>
+                <textarea name="des" rows="3" cols="50"></textarea>
+            </div>
+            <div class="row">
+                <span class="lbl">指导：</span>
+                <textarea name="guide" rows="10" cols="50"></textarea>
+            </div>
+            <div class="row">
+                <span class="lbl">排序：</span>
+                <input name="order" class="inp">
+                <span>*大于0的整数</span>
+            </div>
+            <div class="row row-img">
+                <span class="lbl">图片：</span>
+                <div class="img-outer-box">
+                    <input type="file">
+	                <div class="img-box">
+	                    <div class="content">
+	                        <span class="icon">+</span>
+	                        <p class="txt">点击添加图片</p>
+	                    </div>
+	                </div>
+                </div>
+            </div>
+            <div class="row">
+                <a href="javascript:;" class="btn sub-btn">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

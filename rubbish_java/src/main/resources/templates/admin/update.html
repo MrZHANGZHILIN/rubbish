@@ -1,0 +1,44 @@
+<!DOCTYPE html >
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/admin/css/update.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/admin/js/update.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>修改管理员</h2>
+    </div>
+    <div class="form-outer-box">
+        <div class="form-box">
+            <div class="row">
+                <span class="lbl">账号：</span>
+                <span th:text="${entity.loginId}"></span>
+            </div>
+            <div class="row">
+                <span class="lbl">密码：</span>
+                <input name="password" type="password" class="inp" th:value="${entity.password}">
+            </div>
+            <div class="row">
+                <span class="lbl">状态：</span>
+                <select name="status" class="page_combox" th:data-value="${entity.status}">
+		            <option value="0">正常</option>
+		            <option value="1">禁止</option>
+		        </select>
+            </div>
+            <div class="row">
+                <input name="dbid" type="hidden" th:value="${entity.dbid}">
+                <a href="javascript:;" class="btn sub-btn">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

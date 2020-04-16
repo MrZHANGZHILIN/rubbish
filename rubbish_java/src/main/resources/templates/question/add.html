@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/question/css/add.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/question/js/add.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>添加试题</h2>
+    </div>
+    <div class="form-outer-box">
+        <div class="form-box">
+            <div class="row">
+                <span class="lbl">问题：</span>
+                <input name="name" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">选项A：</span>
+                <input name="a" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">选项B：</span>
+                <input name="b" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">选项C：</span>
+                <input name="c" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">选项D：</span>
+                <input name="d" class="inp">
+            </div>
+            <div class="row">
+                <span class="lbl">答案：</span>
+                <input name="answer" class="inp">
+            </div>
+            <div class="row">
+                <a href="javascript:;" class="btn sub-btn">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

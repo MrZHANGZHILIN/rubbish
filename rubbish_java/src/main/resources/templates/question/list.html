@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>试题-垃圾分类系统</title>
+<link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/question/css/list.css}" rel="stylesheet" type="text/css"/>
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+<link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
+<script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
+<script th:src="@{/js/common.js}" type="text/javascript"></script>
+<script th:src="@{/question/js/list.js}" type="text/javascript"></script>
+</head>
+<body>
+<div class="body-box">
+    <div class="header">
+        <h2>试题列表</h2>
+    </div>
+    <div class="search-box">
+        <form action="/question/list" method="post">
+	        <input name="name" th:value="${name}">
+	        <input name="p" type="hidden">
+	        <button type="submit" class="btn">查询</button>
+	        <a href="/question/addPage">添加试题</a>
+        </form>
+    </div>
+    <div class="table-box">
+        <div class="table-head">
+            <span>问题</span>
+            <span>选项A</span>
+            <span>选项B</span>
+            <span>选项C</span>
+            <span>选项D</span>
+            <span>答案</span>
+            <span>操作</span>
+        </div>
+        <div class="table-body" th:each="item : ${list}">
+            <div class="row">
+                <span th:text="${item.name}"></span>
+                <span th:text="${item.a}"></span>
+                <span th:text="${item.b}"></span>
+                <span th:text="${item.c}"></span>
+                <span th:text="${item.d}"></span>
+                <span th:text="${item.answer}"></span>
+                <span>
+                    <a th:href="@{'/question/updatePage?dbid=' + ${item.dbid}}">编辑</a>
+                    <a href="javascript:;" class="delete-btn" th:data-dbid="${item.dbid}">删除</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="pagination">
+        <div class="pagination-inner">
+            <my:pagelink ></my:pagelink>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

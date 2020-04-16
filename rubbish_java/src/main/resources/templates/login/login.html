@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>登录</title>
+  <link rel="stylesheet" th:href="@{/login/css/login.css}">
+  <script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
+  <script th:src="@{/js/jquery.cookie.js}" type="text/javascript"></script>
+  <script th:src="@{/login/js/login.js}"></script>
+</head>
+<body>
+    <div class="form-box">
+        <div class="header">
+            <p>登录 垃圾回收系统</p>
+        </div>
+        <div class="form-item">
+            <input type="text" name="loginId" placeholder="登录账号" class="inp">
+        </div>
+        <div class="form-item">
+            <input type="password" name="password" placeholder="登录密码" class="inp" value="">
+        </div>
+        <div class="form-item">
+            <input type="text" name="captcha" placeholder="图形验证码" class="inp" style="width: 60%;">
+	        <img src="/getCaptcha" class="refresh_captcha">
+        </div>
+        <div class="form-item">
+            <button class="btn sub-btn">登 入</button>
+        </div>
+    </div>
+</body>
+</html>
