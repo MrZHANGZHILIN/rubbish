@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 @TableName("admin")
 public class Admin implements Serializable {
-
+    private static final long serialVersionUID = 1L;
 	@TableId("dbid")
     private int dbid;
 	@TableField("loginId")

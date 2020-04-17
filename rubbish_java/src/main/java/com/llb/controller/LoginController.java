@@ -6,12 +6,15 @@ import com.llb.common.MD5Util;
 import com.llb.common.SessionUtil;
 import com.llb.service.IAdminService;
 import com.llb.entity.Admin;
+import com.llb.service.IUserService;
 import com.llb.service.impl.AdminService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Controller("loginController")
@@ -29,7 +34,8 @@ public class LoginController extends BaseController{
 	
 	@Autowired
 	private IAdminService adminService;
-	
+	@Autowired
+	private IUserService userService;
 	
 	/**
 	 * 首页
@@ -152,5 +158,23 @@ public class LoginController extends BaseController{
 		int g = random.nextInt(255);
 		int b = random.nextInt(255);
 		return new Color(r, g, b);
+	}
+
+	/**
+	 * 微信小程序：用户授权登录接口
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/api/login", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> getWxAuth(@RequestBody Map<String, String > map) {
+		Map<String, Object> result = new HashMap<>();
+		String code = map.get("code");
+		if(code == null || "".equals(code)) {
+			result.put("msg", "请重新授权");
+		} else {
+			result = userService.wxLogin(code);
+		}
+		return result;
 	}
 }

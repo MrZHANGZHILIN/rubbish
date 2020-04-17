@@ -2,7 +2,7 @@
 <html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>垃圾-垃圾分类系统</title>
+<title>用户-垃圾分类系统</title>
 <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
 <link th:href="@{/rubbish/css/list.css}" rel="stylesheet" type="text/css"/>
 <script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
@@ -14,14 +14,14 @@
 <body>
 <div class="body-box">
     <div class="header">
-        <h2>垃圾列表</h2>
+        <h2>用户列表</h2>
     </div>
     <div class="search-box">
         <form action="/user/list" method="post">
 	        <input name="name" th:value="${name}">
 	        <input name="p" type="hidden">
 	        <button type="submit" class="btn">查询</button>
-	        <a href="/rubbish/addPage">添加垃圾</a>
+	        <a href="/user/addPage">添加用户</a>
         </form>
     </div>
     <div class="table-box">

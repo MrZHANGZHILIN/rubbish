@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.llb.mapper.UserMapper">
+	<!-- 插入 -->
+	<insert id="insert" parameterType="User">
+		insert into wx_user(
+		     openid,
+		     nickname,
+		     avatarurl,
+		     gender,
+		     country,
+		     province,
+		     city,
+		     language,
+		     ctime,
+		     logintime,
+		     logouttime,
+		     phone
+		     )
+		values (
+		     #{openid},
+		     #{nickName},
+		     #{avatarUrl},
+		     #{gender},
+		     #{country},
+		     #{province},
+		     #{city},
+		     #{language},
+		     #{ctime},
+		     #{loginTime},
+		     #{logoutTime},
+		     #{phone}
+		     )
+	</insert>
+	<!-- 查询 -->
+	<select id="query" resultType="map">
+		select * from wx_user
+		<where>
+			<if test="openid != null and openid != ''">
+				and openid = #{openid}
+			</if>
+		</where>
+		<if test="pu != null">
+			limit #{pu.index},#{pu.pageSize}
+		</if>
+	</select>
+	<!-- 修改-->
+	<update id="update">
+		update wx_user set
+			<if test="nickName != null">
+				nickname = #{nickName},
+			</if>
+			<if test="avatarUrl != null">
+				avatarurl = #{avatarUrl},
+			</if>
+			<if test="gender != null">
+				gender = #{gender},
+			</if>
+			<if test="country != null">
+				country = #{country},
+			</if>
+			<if test="province != null">
+				province = #{province},
+			</if>
+			<if test="city != null">
+				city = #{city},
+			</if>
+			<if test="language != null">
+				language = #{language},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="loginTime != null">
+				logintime = #{loginTime},
+			</if>
+			<if test="logoutTime != null">
+				logouttime = #{logoutTime},
+			</if>
+		    where openid = #{openid}
+	</update>
+	<select id="findByOpenid" resultType="User">
+		select * from wx_user where openid=#{openid}
+	</select>
+	<!-- 通用查询 -->
+	<select id="find" resultType="map">
+		select * from wx_user
+		<where>
+			<if test="nickName != null and nickName != ''">
+				and nickname like concat('%', #{nickName} , '%')
+			</if>
+		</where>
+	</select>
+	<!-- 获取记录数 -->
+	<select id="totalCount" resultType="long">
+		select count(*) from wx_user
+		<where>
+			<if test="nickName != null and nickName != ''">
+				and nickname like concat('%', #{nickName} , '%')
+			</if>
+		</where>
+	</select>
+	<!-- 删除 -->
+	<delete id="delete">
+		delete from wx_user
+		<where>
+			<if test="openids != null and openids != ''">
+				openid in
+				<foreach item="item" index="index" collection="openids"
+						 open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</delete>
+</mapper>

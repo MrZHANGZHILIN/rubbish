@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("category")
 public class Category {
+    private static final long serialVersionUID = 1L;
 	@TableId("dbid")
     private int dbid;
 	@TableField("name")
