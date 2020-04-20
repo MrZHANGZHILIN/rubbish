@@ -36,8 +36,8 @@
         <div class="table-body">
             <div class="row" th:each="item : ${list}">
                 <span>
-                    <a th:href="${item.img}" target="_blank">
-                        <img th:src="${item.img}"/>
+                    <a th:href="@{'/'+${item.img}}" target="_blank">
+                        <img th:src="@{'/'+${item.img}}"/>
                     </a>
                 </span>
                 <span th:text="${item.name}"></span>
