@@ -156,7 +156,14 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-pool2</artifactId>
     </dependency>
+<!--    京东接口-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>27.1-jre</version>
+    </dependency>
   </dependencies>
+
 
   <build>
     <finalName>rubbish_java</finalName>

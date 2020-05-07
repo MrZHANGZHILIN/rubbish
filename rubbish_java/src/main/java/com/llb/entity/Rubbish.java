@@ -23,6 +23,8 @@ public class Rubbish implements Serializable {
     private String name;
 	@TableField("categoryId")
     private int categoryId;
+	@TableField("ps")
+	private String ps;
 	@TableField("hot")
     private String hot;
 

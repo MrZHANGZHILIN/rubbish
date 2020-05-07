@@ -41,6 +41,13 @@ public interface ICategoryService {
     public List<Category> find(Map<String, Object> map);
 
     /**
+     * 分类名称查询分类id
+     * @param name
+     * @return
+     */
+    public int findDbidByName(String name);
+
+    /**
      * 分页查询
      * @param pageNum
      * @param pageSize

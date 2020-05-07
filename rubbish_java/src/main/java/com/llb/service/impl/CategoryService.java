@@ -40,6 +40,17 @@ public class CategoryService implements ICategoryService {
 	public List<Category> find(Map<String, Object> map){
 		return this.categoryMapper.find(map);
 	}
+
+	/**
+	 * 分类名称查询分类id
+	 * @param name
+	 * @return
+	 */
+	@Override
+	public int findDbidByName(String name) {
+		return this.categoryMapper.findDbidByName(name);
+	}
+
 	/**
 	 * 查询
 	 */

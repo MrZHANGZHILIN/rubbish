@@ -1,6 +1,7 @@
 package com.llb.controller;
 
 import com.llb.common.ResultInfo;
+import com.llb.service.IBaiduAi;
 import com.llb.service.IRubbishService;
 import com.llb.entity.Rubbish;
 import com.llb.service.impl.RubbishService;
@@ -28,7 +29,8 @@ public class RubbishController extends BaseController{
 	private static final Logger L = Logger.getLogger(RubbishController.class);
 	@Autowired
 	private IRubbishService rubbishService;
-	
+	@Autowired
+	private IBaiduAi baiduAi;
 	/**
 	 * 首页
 	 * 
@@ -86,13 +88,15 @@ public class RubbishController extends BaseController{
 	@ResponseBody
 	public Object add(
 			HttpServletRequest request, 
-			String name, 
+			String name,
+			String ps,
 			int categoryId,
 			String hot){
 		try {
 			Rubbish entity = new Rubbish();
 			entity.setName(name);
 			entity.setCategoryId(categoryId);
+			entity.setPs(ps);
 			entity.setHot(hot);
 			this.rubbishService.insert(entity);
 			
@@ -133,13 +137,14 @@ public class RubbishController extends BaseController{
 			int dbid, 
 			String name, 
 			int categoryId,
+			String ps,
 			String hot
 			) {
 		try {
 			Rubbish entity = this.rubbishService.findByDbid(dbid);
 			entity.setName(name);
-			entity.setName(name);
 			entity.setCategoryId(categoryId);
+			entity.setPs(ps);
 			entity.setHot(hot);
 			this.rubbishService.update(entity);
 			return this.success(null);
@@ -238,6 +243,10 @@ public class RubbishController extends BaseController{
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("keyword", keyword);
 			List<Rubbish> list = this.rubbishService.find(params);
+			if(list.size() == 0) {
+				return baiduAi.garbageTextSearch(keyword);
+			}
+			//如果调用
 			return new ResultInfo<Object>(0, list);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -25,6 +25,13 @@ public interface CategoryMapper {
 	 * 通用查询
 	 */
 	public List<Category> find(Map<String, Object> map);
+
+	/**
+	 * 分类名称查询分类id
+	 * @param name
+	 * @return
+	 */
+	int findDbidByName(String name);
 	/**
 	 * 查询
 	 */

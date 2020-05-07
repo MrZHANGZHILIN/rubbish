@@ -46,6 +46,13 @@
 		</where> 
 		order by order_ asc
 	</select>
+
+	<!-- 分类名称查询分类id -->
+	<select id="findDbidByName" resultType="int" parameterType="String">
+		select dbid from category
+		where name = #{name}
+	</select>
+
 	<!-- 查询 -->
 	<select id="query" resultType="hashmap">
 		select * from category

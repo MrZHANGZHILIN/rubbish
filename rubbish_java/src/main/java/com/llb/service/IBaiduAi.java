@@ -1,6 +1,7 @@
 package com.llb.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.llb.common.ResultInfo;
 
 /**
  * 百度接口业务层
@@ -14,6 +15,12 @@ public interface IBaiduAi {
      * @return
      */
     void authBaiduImage();
+
+    /**
+     * 京东鉴权信息
+     * @return
+     */
+    ResultInfo<Object> garbageTextSearch(String garbage);
 
     /**
      * 图片识别
