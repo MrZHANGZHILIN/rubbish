@@ -2,18 +2,25 @@ package com.llb.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.llb.common.ResultInfo;
+import com.llb.service.IBaiduAi;
 import com.llb.service.ICategoryService;
 import com.llb.entity.Category;
 import com.llb.service.impl.CategoryService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +32,18 @@ import java.util.Map;
  */
 @Controller("categoryController")
 @RequestMapping("/category")
+@Log4j
 public class CategoryController extends BaseController{
 	private static final Logger L = Logger.getLogger(CategoryController.class);
 	@Autowired
 	private ICategoryService categoryService;
-	
-	/**
+	@Autowired
+	private IBaiduAi baiduAi;
+	@Value("${upload_path}")
+	private String upload_path;
+
+
+	/**upload_path
 	 * 首页
 	 * 
 	 * @return
@@ -215,6 +228,37 @@ public class CategoryController extends BaseController{
 		}
 		return new ResultInfo<Object>(1000, "未知错误"); 
 	}
+
+	/**
+	 * 图片识别API
+	 * @return
+	 */
+	@RequestMapping("/api/uploadImage")
+	@ResponseBody
+	public Object uploadImage(HttpServletRequest request) {
+		MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
+		MultipartFile multipartFile =  req.getFile("file");
+		String realPath = upload_path;//服务器存放图片地址
+		try {
+			File dir = new File(realPath);
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			String newPath = System.currentTimeMillis()+""+(int)(1+Math.random()*(10000-1+1))+".jpg";//图片名称是毫秒数加1-10000的随机数
+			File file  =  new File(realPath,newPath);
+			multipartFile.transferTo(file);
+			//图片识别
+			ResultInfo<Object> resultInfo = baiduAi.imageRecognition(file);
+			L.info("图片识别成功：" + resultInfo);
+			return resultInfo.getData();
+		} catch (Exception e) {
+			e.printStackTrace();
+			L.error("-------------", e);
+		}
+
+		return new ResultInfo<>(1000, "未知错误");
+	}
+
 	/**
 	 * 查询全部
 	 */

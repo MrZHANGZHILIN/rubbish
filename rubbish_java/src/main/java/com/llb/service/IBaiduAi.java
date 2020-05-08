@@ -3,6 +3,8 @@ package com.llb.service;
 import com.alibaba.fastjson.JSONObject;
 import com.llb.common.ResultInfo;
 
+import java.io.File;
+
 /**
  * 百度接口业务层
  * @Author llb
@@ -14,7 +16,7 @@ public interface IBaiduAi {
      * 百度图片识别鉴权信息
      * @return
      */
-    void authBaiduImage();
+    String authBaiduImage();
 
     /**
      * 京东鉴权信息
@@ -24,8 +26,8 @@ public interface IBaiduAi {
 
     /**
      * 图片识别
-     * @param imageBase64 识别物体名称Base64编码
+     * @param image 图片文件
      * @return
      */
-    JSONObject imageRecognition(String imageBase64, String accessToken);
+    ResultInfo<Object> imageRecognition(File image);
 }
