@@ -36,9 +36,9 @@ public class BaiduAiImpl implements IBaiduAi {
 
     //图片识别
     //apikey
-    private static final String BaiduImageApiKey = PropertiesUtil.getProperty("baiduImageApiKey");
+    private static final String baiduApiKey = PropertiesUtil.getProperty("baiduApiKey");
     //secretkey
-    private static final String BaiduImageSecretKey = PropertiesUtil.getProperty("baiduImageSecretKey");
+    private static final String baiduSecretKey = PropertiesUtil.getProperty("baiduSecretKey");
     //baiduImageAuthApi
     private static final String BaiduImageAuthApi = PropertiesUtil.getProperty("baiduImageAuthApi");
     //baiduImageURL
@@ -64,12 +64,12 @@ public class BaiduAiImpl implements IBaiduAi {
      * @return
      */
     @Override
-    public String authBaiduImage() {
+    public String getBaiduAuth() {
         Map<String, Object> params = new HashMap<>();
         //必须
         params.put("grant_type", "client_credentials");
-        params.put("client_id", BaiduImageApiKey);
-        params.put("client_secret", BaiduImageSecretKey);
+        params.put("client_id", baiduApiKey);
+        params.put("client_secret", baiduSecretKey);
         //鉴权
         JSONObject responseByParams = new HttpClientUtil().getResponseByParams(BaiduImageAuthApi, params);
         String access_token = responseByParams.getString("access_token");
@@ -156,7 +156,7 @@ public class BaiduAiImpl implements IBaiduAi {
         String token = (String) redisTemplate.opsForValue().get("baiduAccess_token");
         if (!baiduAccess_token) {
             //重新缓存access_token
-            token = baiduAi.authBaiduImage();
+            token = baiduAi.getBaiduAuth();
         }
         //百度图片识别url
         String baiduImageURL = BaiduImageURL + "?access_token=" + token;

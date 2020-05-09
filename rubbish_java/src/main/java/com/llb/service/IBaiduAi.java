@@ -16,7 +16,7 @@ public interface IBaiduAi {
      * 百度图片识别鉴权信息
      * @return
      */
-    String authBaiduImage();
+    String getBaiduAuth();
 
     /**
      * 京东鉴权信息

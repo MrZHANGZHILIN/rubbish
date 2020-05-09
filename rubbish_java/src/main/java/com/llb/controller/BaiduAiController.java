@@ -28,7 +28,7 @@ public class BaiduAiController extends BaseController{
     public Map<String, Object> baiduImageAuth() {
         Map<String, Object> result = new HashMap<>();
         try {
-             baiduAi.authBaiduImage();
+             baiduAi.getBaiduAuth();
         } catch (Exception e) {
             e.printStackTrace();
 
