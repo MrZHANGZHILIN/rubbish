@@ -224,6 +224,13 @@ public class RubbishController extends BaseController{
 			Rubbish entity = this.rubbishService.findByName(name);
 			if(entity != null)
 			  return new ResultInfo<Object>(0, entity);
+			//调用百度接口
+			ResultInfo<Object> resultInfo = baiduAi.garbageTextSearch(name);
+			if(resultInfo.getCode() == 0) {
+				List<Rubbish> rubbishes = (List<Rubbish>) resultInfo.getData();
+				resultInfo.setData(rubbishes.get(0));
+				return resultInfo;
+			}
 			return new ResultInfo<Object>(10, "未找到垃圾");
 		} catch (Exception e) {
 			e.printStackTrace();
