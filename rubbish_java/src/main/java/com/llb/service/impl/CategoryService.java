@@ -1,5 +1,7 @@
 package com.llb.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.PageUtil;
 import com.llb.mapper.CategoryMapper;
 import com.llb.entity.Category;
@@ -54,11 +56,8 @@ public class CategoryService implements ICategoryService {
 	/**
 	 * 查询
 	 */
-	public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map){
-		if (pageSize > 0) {
-			map.put("pu", new PageUtil<>(pageNum, pageSize));
-		}
-		return this.categoryMapper.query(map);
+	public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String name){
+		return categoryMapper.query(pageParam, name);
 	}
 
 	/**

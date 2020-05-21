@@ -56,18 +56,26 @@
 		order by dbid desc
 	</select>
 	<!-- 查询 -->
-	<select id="query" resultType="hashmap">
-		select a.*, b.name categoryName from rubbish a
-		left join category b on a.categoryId = b.dbid
-		<where>
-			<if test="name != null and name != ''">
-				and a.name like concat('%', #{name} , '%')
-			</if>
-		</where>
-		order by a.dbid desc 
-		<if test="pu != null">
-			 limit #{pu.index},#{pu.pageSize}
-	    </if>
+	<select id="query" resultType="Map" parameterType="String">
+<!--		select a.*, b.name categoryName from rubbish a-->
+<!--		left join category b on a.categoryId = b.dbid-->
+<!--		<where>-->
+<!--			<if test="name != null and name != ''">-->
+<!--				and a.name like concat('%', #{name} , '%')-->
+<!--			</if>-->
+<!--		</where>-->
+<!--		order by a.dbid desc -->
+<!--		<if test="pu != null">-->
+<!--			 limit #{pu.index},#{pu.pageSize}-->
+<!--	    </if>-->
+			select a.*, b.name categoryName from rubbish a
+			left join category b on a.categoryId = b.dbid
+			<where>
+				<if test="name != null and name != ''">
+					and a.name like concat('%', #{name} , '%')
+				</if>
+			</where>
+			order by a.dbid desc
 	</select>
 	<!-- 获取记录数 -->
 	<select id="totalCount" resultType="long">

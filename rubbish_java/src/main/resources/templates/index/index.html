@@ -4,11 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>控制台-垃圾分类系统</title>
 <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css"/>
-<link th:href="@{~/index/css/index.css}" rel="stylesheet" type="text/css"/>
+<link th:href="@{/index/css/index.css}" rel="stylesheet" type="text/css"/>
 <script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
 <link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
 <script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
 <script th:src="@{/index/js/index.js}" type="text/javascript"></script>
+    <script th:inline="javascript">
+        var ctx = [[@{/}]]
+    </script>
 </head>
 <body>
 <div class="body-box">
@@ -30,14 +33,14 @@
         <div class="menus">
             <ul>
 
-                <li><a href="/admin/list" target="content">管理员管理</a></li>
-                <li><a href="/category/list" target="content">垃圾分类管理</a></li>
-                <li><a href="/rubbish/list" target="content">垃圾管理</a></li>
-                <li><a href="/question/list" target="content">试题管理</a></li>
+                <li><a th:href="@{/admin/list}" target="content">管理员管理</a></li>
+                <li><a th:href="@{/category/list}" target="content">垃圾分类管理</a></li>
+                <li><a th:href="@{/rubbish/list}" target="content">垃圾管理</a></li>
+                <li><a th:href="@{/question/list}" target="content">试题管理</a></li>
             </ul>
         </div>
         <div class="content">
-            <iframe name="content" src="/welcome" frameborder="0" scrolling="auto"></iframe>
+            <iframe name="content" th:src="@{/welcome}" frameborder="0" scrolling="auto"></iframe>
         </div>
     </div>
 </div>

@@ -27,7 +27,7 @@ $(function(){
 		//热门
 		data.hot = $.trim($("select[name=hot]").val());
 		$.ajax({
-	        url: "/rubbish/add",
+	        url: ctx + "rubbish/add",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -41,7 +41,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/rubbish/list";
+	 	        		location.href = ctx + "rubbish/list";
 	        		}, 3000); 
 	        		
 	        	}else{

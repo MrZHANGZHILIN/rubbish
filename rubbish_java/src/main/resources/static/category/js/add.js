@@ -14,7 +14,7 @@ $(function(){
 		var formData = new FormData();
 		formData.append('file', $(this)[0].files[0]);
 		$.ajax({
-	        url: "/common/uploadImg",
+	        url: ctx + "common/uploadImg",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -22,7 +22,7 @@ $(function(){
 	        contentType: false,
 	        data: formData,
 	        success: function (data) {
-	        	if(data.errno != 0){
+	        	if(data.error != 0){
 	        		return ;
 	        	}
 	        	var url = data.data[0];
@@ -71,7 +71,7 @@ $(function(){
 		}
 		data.img = $img.attr("src");
 		$.ajax({
-	        url: "/category/add",
+	        url: ctx + "category/add",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -85,7 +85,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/category/list";
+	 	        		location.href = ctx + "category/list";
 	        		}, 3000); 
 	        		
 	        	}else{

@@ -1,5 +1,7 @@
 package com.llb.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.MD5Util;
 import com.llb.service.IAdminService;
 import com.llb.entity.Admin;
@@ -38,23 +40,19 @@ public class AdminController extends BaseController{
 	public ModelAndView list(
 			HttpServletRequest request,
 			@RequestParam(value = "loginId", defaultValue = "") String loginId,
-			@RequestParam(value = "p", defaultValue = "1") int pageNO) {
+			@RequestParam(defaultValue = "1", required = false, value = "page") Integer page,
+			@RequestParam(defaultValue = "10", required = false, value = "limit") Integer limit) {
 		try {
 			final int pageSize = 10;
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("loginId", loginId);
-			List<HashMap<String, Object>> list = adminService.query(pageNO, pageSize, params);
-			long totalCount = adminService.totalCount(params);
-			
+			//分页操作
+			Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+			IPage<Map<String, Object>> admins = adminService.query(pageParam, loginId);
+
 			ModelAndView mv = new ModelAndView("admin/list");
-			mv.addObject("pageNo", pageNO);
-			mv.addObject("totalCount", totalCount);
-			mv.addObject("pageSize", pageSize);
-			mv.addObject("domain", this.getDomain(request));
-			mv.addObject("link", "admin/list.html");
-			mv.addObject("params", "loginId="+loginId);
-			
-			mv.addObject("list", list);
+			mv.addObject("list", admins.getRecords());
+			mv.addObject("count", admins.getTotal());
 			mv.addObject("loginId", loginId);
 			return mv;
 		} catch (Exception e) {
@@ -63,6 +61,29 @@ public class AdminController extends BaseController{
 		}
 		return null;
 	}
+
+	/**
+	 * 分页操作
+	 * @param name
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping("pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(value = "loginId", defaultValue = "") String loginId,
+										@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+										@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
+		Map<String, Object> result = new HashMap<>();
+		//分页操作
+		Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+		IPage<Map<String, Object>> rubbishs = adminService.query(pageParam, loginId);
+		result.put("count", rubbishs.getTotal());
+		result.put("list", rubbishs.getRecords());
+		result.put("loginId", loginId);
+		return result;
+	}
+
 	/**
 	 * 添加页面
 	 * 

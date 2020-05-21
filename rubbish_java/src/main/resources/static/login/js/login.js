@@ -7,7 +7,9 @@ $(function(){
 		$('input[name=remember]').prop('checked',true);  
 	//刷新验证码
 	$(".refresh_captcha").on("click", function(){
-		$(this).attr("src", "/getCaptcha?random="+new Date().getTime());
+		var str = ctx1 +"getCaptcha?random="+new Date().getTime();
+		console.log(str);
+		$(this).attr("src", ctx1 +"getCaptcha?random="+new Date().getTime());
 	})
 	//按回车登录
 	$(document).keydown(function(e){ 
@@ -36,7 +38,7 @@ $(function(){
 		}
 		
 		$.ajax({
-	        url: "/doLogin",
+	        url: ctx1 + "doLogin",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -54,7 +56,7 @@ $(function(){
 	        	}else{
 	        		$.cookie('password', '');
 	        	}
-	        	location.href = "/index";
+	        	location.href = ctx1 + "index";
 	        }
     	});
 	})

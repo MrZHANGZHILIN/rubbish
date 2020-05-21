@@ -22,7 +22,7 @@ $(function(){
 		data.status = $.trim($("select[name=status]").val());
 		data.dbid = $.trim($("input[name=dbid]").val());
 		$.ajax({
-	        url: "/admin/update",
+	        url: ctx + "admin/update",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -36,7 +36,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/admin/list";
+	 	        		location.href = ctx + "admin/list";
 	        		}, 3000); 
 	        		
 	        	}else{

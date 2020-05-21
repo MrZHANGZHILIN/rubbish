@@ -47,7 +47,7 @@ $(function(){
 		data.answer = $.trim($("input[name=answer]").val());
 		data.dbid = $.trim($("input[name=dbid]").val());
 		$.ajax({
-	        url: "/question/update",
+	        url: ctx + "question/update",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -61,7 +61,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/question/list";
+	 	        		location.href = ctx + "question/list";
 	        		}, 3000); 
 	        		
 	        	}else{

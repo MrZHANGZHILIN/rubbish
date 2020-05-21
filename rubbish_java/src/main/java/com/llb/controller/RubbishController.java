@@ -1,10 +1,11 @@
 package com.llb.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.ResultInfo;
 import com.llb.service.IBaiduAi;
 import com.llb.service.IRubbishService;
 import com.llb.entity.Rubbish;
-import com.llb.service.impl.RubbishService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,34 +33,35 @@ public class RubbishController extends BaseController{
 	private IRubbishService rubbishService;
 	@Autowired
 	private IBaiduAi baiduAi;
+
 	/**
 	 * 首页
 	 * 
 	 * @return
 	 */
 	@RequestMapping("list")
+	@ResponseBody
 	public ModelAndView list(
 			HttpServletRequest request,
 			@RequestParam(value = "name", defaultValue = "") String name,
-			@RequestParam(value = "p", defaultValue = "1") int pageNO) {
+			@RequestParam(defaultValue = "1", required = false, value = "page") Integer page,
+			@RequestParam(defaultValue = "10", required = false, value = "limit") Integer limit) {
 		try {
-			final int pageSize = 10;
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("name", name);
-			List<HashMap<String, Object>> list = rubbishService.query(pageNO, pageSize, params);
-			long totalCount = rubbishService.totalCount(params);
-			
-			
+//			final int pageSize = 10;
+			Map<String, Object> result = new HashMap<String, Object>();
 			ModelAndView mv = new ModelAndView("rubbish/list");
-			mv.addObject("pageNo", pageNO);
-			mv.addObject("totalCount", totalCount);
-			mv.addObject("pageSize", pageSize);
-			mv.addObject("domain", this.getDomain(request));
-			mv.addObject("link", "rubbish/list.html");
-			mv.addObject("params", "name="+name);
-			
-			mv.addObject("list", list);
+			//分页操作
+			Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+			IPage<Map<String, Object>> rubbishs = rubbishService.query(pageParam, name);
+			if(rubbishs.getTotal() == 0) {
+				result.put("code", 200);
+				result.put("msg", "没有垃圾！");
+			}
+
+			mv.addObject("count", rubbishs.getTotal());
 			mv.addObject("name", name);
+			mv.addObject("list", rubbishs.getRecords());
+
 			return mv;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -66,6 +69,29 @@ public class RubbishController extends BaseController{
 		}
 		return null;
 	}
+
+	/**
+	 * 分页操作
+	 * @param name
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping("pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(value = "name", defaultValue = "") String name,
+										@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+										@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
+		Map<String, Object> result = new HashMap<>();
+		//分页操作
+		Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+		IPage<Map<String, Object>> rubbishs = rubbishService.query(pageParam, name);
+		result.put("count", rubbishs.getTotal());
+		result.put("list", rubbishs.getRecords());
+		result.put("name", name);
+		return result;
+	}
+
 	/**
 	 * 添加页面
 	 * 

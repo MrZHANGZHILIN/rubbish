@@ -1,5 +1,7 @@
 package com.llb.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.ResultInfo;
 import com.llb.service.IQuestionService;
 import com.llb.entity.Question;
@@ -38,24 +40,19 @@ public class QuestionController extends BaseController{
 	public ModelAndView list(
 			HttpServletRequest request,
 			@RequestParam(value = "name", defaultValue = "") String name,
-			@RequestParam(value = "p", defaultValue = "1") int pageNO) {
+			@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+			@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
 		try {
-			final int pageSize = 10;
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("name", name);
-			List<HashMap<String, Object>> list = questionService.query(pageNO, pageSize, params);
-			long totalCount = questionService.totalCount(params);
-			
-			
+
+			//分页操作
+			Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+			IPage<Map<String, Object>> questions = questionService.query(pageParam, name);
+
 			ModelAndView mv = new ModelAndView("question/list");
-			mv.addObject("pageNo", pageNO);
-			mv.addObject("totalCount", totalCount);
-			mv.addObject("pageSize", pageSize);
-			mv.addObject("domain", this.getDomain(request));
-			mv.addObject("link", "question/list.html");
-			mv.addObject("params", "name="+name);
-			
-			mv.addObject("list", list);
+			mv.addObject("count", questions.getTotal());
+			mv.addObject("list", questions);
 			mv.addObject("name", name);
 			return mv;
 		} catch (Exception e) {
@@ -64,6 +61,29 @@ public class QuestionController extends BaseController{
 		}
 		return null;
 	}
+
+	/**
+	 * 分页操作
+	 * @param name
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping("pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(value = "name", defaultValue = "") String name,
+										@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+										@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
+		Map<String, Object> result = new HashMap<>();
+		//分页操作
+		Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+		IPage<Map<String, Object>> rubbishs = questionService.query(pageParam, name);
+		result.put("count", rubbishs.getTotal());
+		result.put("list", rubbishs.getRecords());
+		result.put("name", name);
+		return result;
+	}
+
 	/**
 	 * 添加页面
 	 * 

@@ -54,17 +54,14 @@
 	</select>
 
 	<!-- 查询 -->
-	<select id="query" resultType="hashmap">
+	<select id="query" resultType="Map" parameterType="String">
 		select * from category
 		<where>
 			<if test="name != null and name != ''">
 				and name like concat('%', #{name}, '%')
 			</if>
 		</where>
-		order by order_ asc 
-		<if test="pu != null">
-			 limit #{pu.index},#{pu.pageSize}
-	    </if>
+		order by order_ asc
 	</select>
 	<!-- 获取记录数 -->
 	<select id="totalCount" resultType="long">

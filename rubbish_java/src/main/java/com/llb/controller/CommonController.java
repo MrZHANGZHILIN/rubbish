@@ -27,7 +27,7 @@ public class CommonController {
 	 */
 	@RequestMapping("/uploadImg")
 	@ResponseBody
-	public Object uploadImg(
+	public Object uploadFile(
 			HttpServletRequest request,
 			@RequestParam("file") CommonsMultipartFile file) {
 		try {

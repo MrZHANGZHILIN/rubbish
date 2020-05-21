@@ -14,7 +14,7 @@ body{
 	background: #d6dde1;
 }
 .header h2{
-	background: url(../../../image/header_icon.png) no-repeat;
+	background: url(../../image/header_icon.png) no-repeat;
 	padding: 0 0 0 20px;
 	margin: 0 0 0 12px;
 }

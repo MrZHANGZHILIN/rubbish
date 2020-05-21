@@ -49,6 +49,8 @@ public class BaiduAiImpl implements IBaiduAi {
     private String jingDongSecretKey;
     @Value("${garbageTextSearchUrl}")
     private String textSearchUrl;
+    @Value("${baiduVoiceURL}")
+    private String BaiduVoiceURL;
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
@@ -142,7 +144,7 @@ public class BaiduAiImpl implements IBaiduAi {
         //上传文件路径
         String uploadImgPath = "";
         try {
-            uploadImgPath = new Upload2QiNiu().uploadImg(image, "liulebin");
+            uploadImgPath = new Upload2QiNiu().uploadFile(image, "liulebin");
         } catch (QiniuException e) {
             e.printStackTrace();
             return new ResultInfo<>(1000, e);
@@ -162,6 +164,45 @@ public class BaiduAiImpl implements IBaiduAi {
         String baiduImageURL = BaiduImageURL + "?access_token=" + token;
         //图片识别返回结果
         JSONObject responseByParams = new HttpClientUtil().getResponseByParams(baiduImageURL, params);
+        JSONArray jsonArray = responseByParams.getJSONArray("result");
+        return new ResultInfo<>(0, jsonArray);
+    }
+
+    /**
+     * 语音识别
+     * @param voice 语音识别文件
+     * @return
+     */
+    @Override
+    public ResultInfo<Object> voiceRecognition(File voice) {
+        Map<String, Object> params = new HashMap<>();
+        //上传文件路径
+        String uploadImgPath = "";
+        try {
+            uploadImgPath = new Upload2QiNiu().uploadFile(voice, "liulebin");
+        } catch (QiniuException e) {
+            e.printStackTrace();
+            return new ResultInfo<>(1000, e);
+        }
+
+        //获取该文件的base64编码
+        String base64 = new Base64Util().image2Base64(voice);
+        //基本参数
+        params.put("format", "pcm");
+        params.put("rate", 16000);
+        params.put("channel", 1);
+        params.put("cuid", "asdfasdfasdf"); //此值可以设置为用户openid
+        //查看redis有没有缓存access_token
+        Boolean baiduAccess_token = redisTemplate.hasKey("baiduAccess_token");
+        String token = (String) redisTemplate.opsForValue().get("baiduAccess_token");
+        if (!baiduAccess_token) {
+            //重新缓存access_token
+            token = baiduAi.getBaiduAuth();
+        }
+        params.put("speech", base64);
+        params.put("len", voice.length());
+        //图片识别返回结果
+        JSONObject responseByParams = new HttpClientUtil().getHttpResponseJson(BaiduVoiceURL, params);
         JSONArray jsonArray = responseByParams.getJSONArray("result");
         return new ResultInfo<>(0, jsonArray);
     }

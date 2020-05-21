@@ -1,6 +1,8 @@
 package com.llb.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.ResultInfo;
 import com.llb.service.IBaiduAi;
 import com.llb.service.ICategoryService;
@@ -52,24 +54,18 @@ public class CategoryController extends BaseController{
 	public ModelAndView list(
 			HttpServletRequest request,
 			@RequestParam(value = "name", defaultValue = "") String name,
-			@RequestParam(value = "p", defaultValue = "1") int pageNO) {
+			@RequestParam(defaultValue = "1", required = false, value = "page") Integer page,
+			@RequestParam(defaultValue = "10", required = false, value = "limit") Integer limit) {
 		try {
-			final int pageSize = 10;
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("name", name);
-			List<HashMap<String, Object>> list = categoryService.query(pageNO, pageSize, params);
-			long totalCount = categoryService.totalCount(params);
-			
+			//分页操作
+			Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+			IPage<Map<String, Object>> category = categoryService.query(pageParam, name);
 			
 			ModelAndView mv = new ModelAndView("category/list");
-			mv.addObject("pageNo", pageNO);
-			mv.addObject("totalCount", totalCount);
-			mv.addObject("pageSize", pageSize);
-			mv.addObject("domain", this.getDomain(request));
-			mv.addObject("link", "category/list.html");
-			mv.addObject("params", "name="+name);
-			
-			mv.addObject("list", list);
+			mv.addObject("count", category.getTotal());
+			mv.addObject("list", category);
 			mv.addObject("name", name);
 			return mv;
 		} catch (Exception e) {
@@ -78,6 +74,29 @@ public class CategoryController extends BaseController{
 		}
 		return null;
 	}
+
+	/**
+	 * 分页操作
+	 * @param name
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping("pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(value = "name", defaultValue = "") String name,
+										@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+										@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
+		Map<String, Object> result = new HashMap<>();
+		//分页操作
+		Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+		IPage<Map<String, Object>> rubbishs = categoryService.query(pageParam, name);
+		result.put("count", rubbishs.getTotal());
+		result.put("list", rubbishs.getRecords());
+		result.put("name", name);
+		return result;
+	}
+
 	/**
 	 * 添加页面
 	 * 
@@ -157,6 +176,7 @@ public class CategoryController extends BaseController{
 			) {
 		try {
 			Category entity = this.categoryService.findByDbid(dbid);
+			img = img.replace("/rubbish/", "");
 			entity.setName(name);
 			entity.setImg(img);
 			entity.setDes(des);
@@ -250,6 +270,37 @@ public class CategoryController extends BaseController{
 			//图片识别
 			ResultInfo<Object> resultInfo = baiduAi.imageRecognition(file);
 			L.info("图片识别成功：" + resultInfo);
+			return resultInfo.getData();
+		} catch (Exception e) {
+			e.printStackTrace();
+			L.error("-------------", e);
+		}
+
+		return new ResultInfo<>(1000, "未知错误");
+	}
+
+	/**
+	 * 语音识别API
+	 * @return
+	 */
+	@RequestMapping("/api/uploadVoice")
+	@ResponseBody
+	public Object uploadVoice(HttpServletRequest request) {
+		MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
+		MultipartFile multipartFile =  req.getFile("file");
+		String realPath = upload_path;//服务器存放图片地址
+		try {
+			File dir = new File(realPath);
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			String newPath = System.currentTimeMillis()+""+(int)(1+Math.random()*(10000-1+1))+".pcm";//语音文件名称是毫秒数加1-10000的随机数
+			File file  =  new File(realPath,newPath);
+			multipartFile.transferTo(file);
+			//语音识别
+			//TODO:语音识别未对接
+			ResultInfo<Object> resultInfo = baiduAi.voiceRecognition(file);
+			L.info("语音识别成功：" + resultInfo);
 			return resultInfo.getData();
 		} catch (Exception e) {
 			e.printStackTrace();

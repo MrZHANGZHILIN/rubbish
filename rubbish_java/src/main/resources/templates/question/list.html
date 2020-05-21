@@ -10,6 +10,8 @@
 <script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
 <script th:src="@{/js/common.js}" type="text/javascript"></script>
 <script th:src="@{/question/js/list.js}" type="text/javascript"></script>
+<link th:href="@{/lib/layui/css/layui.css}" rel="stylesheet" >
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
 </head>
 <body>
 <div class="body-box">
@@ -17,11 +19,10 @@
         <h2>试题列表</h2>
     </div>
     <div class="search-box">
-        <form action="/question/list" method="post">
+        <form th:action="@{/question/list}" method="post">
 	        <input name="name" th:value="${name}">
-	        <input name="p" type="hidden">
 	        <button type="submit" class="btn">查询</button>
-	        <a href="/question/addPage">添加试题</a>
+	        <a th:href="@{/question/addPage}">添加试题</a>
         </form>
     </div>
     <div class="table-box">
@@ -34,27 +35,74 @@
             <span>答案</span>
             <span>操作</span>
         </div>
-        <div class="table-body" th:each="item : ${list}">
-            <div class="row">
-                <span th:text="${item.name}"></span>
-                <span th:text="${item.a}"></span>
-                <span th:text="${item.b}"></span>
-                <span th:text="${item.c}"></span>
-                <span th:text="${item.d}"></span>
-                <span th:text="${item.answer}"></span>
-                <span>
-                    <a th:href="@{'/question/updatePage?dbid=' + ${item.dbid}}">编辑</a>
-                    <a href="javascript:;" class="delete-btn" th:data-dbid="${item.dbid}">删除</a>
-                </span>
-            </div>
+        <div class="table-body" id="questionList">
         </div>
+        <!--    分页-->
+        <div id="page"></div>
     </div>
-    <div class="pagination">
-        <div class="pagination-inner">
-            <my:pagelink ></my:pagelink>
-        </div>
-    </div>
-</div>
 
+</div>
+<script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]]
+</script>
+<script>
+    layui.use('laypage', function() {
+
+        var laypage = layui.laypage;
+        var loginId = $("#name").val();
+        //分页
+        laypage.render({
+            elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: [[${count}]] //数据总数，从服务端得到
+            , limit: 10
+            , limits: [10, 20, 30, 40, 50]
+            , curr: 1                        //起始页
+            , groups: 5                      //连续页码个数
+            , prev: '上一页'                 //上一页文本
+            , next: '下一页'                 //下一页文本
+            , first: 1                      //首页文本
+            , last: '总页数'
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            , jump: function (obj, first) {
+                $.ajax({
+                    url: ctx + "question/pageList",
+                    type: "post",
+                    datatype: "json",
+                    data: {loginId: loginId, page: obj.curr, limit: obj.limit},
+                    success: function (result) {
+                        var table = document.getElementById('questionList');
+                        var html = "";
+                        var item = result.list;
+                        for (var i = 0; i < result.list.length; i++) {
+                            //拼接表格
+                            html += '<div class="row">' +
+                                '<span>'+ item[i].name +'</span>' +
+                                '<span>'+ item[i].a +'</span>' +
+                                '<span>'+ item[i].b +'</span>' +
+                                '<span>'+ item[i].c +'</span>' +
+                                '<span>'+ item[i].d +'</span>' +
+                                '<span>'+ item[i].answer +'</span>' +
+                                '<span>' +
+                                '<a href="/rubbish/question/updatePage?dbid= '+ item[i].dbid +'">编辑 </a>'+
+                                '<a href="javascript:;" class="delete-btn" data-dbid="'+ item[i].dbid +'">删除</a>'+
+                                '</span>'+
+                                '</div>';
+                        }
+
+                        $("#adminList").empty();
+                        table.innerHTML = '';
+                        table.innerHTML = html;
+                    },
+                    error: function (response) {
+                        console.log("出错返回: " + response);
+                        console.log("出错数据: " + JSON.stringify(response));
+                    }
+                });
+            }
+        });
+    });
+
+</script>
 </body>
 </html>

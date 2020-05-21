@@ -9,7 +9,7 @@ $(function(){
 		})
 	}
 	//删除
-	$(".delete-btn").on("click", function(){
+	$(document).on('click', '.delete-btn', function(){
 		var dbid = $(this).attr("data-dbid");
 		swal({
 	  		  title: '删除分类',
@@ -20,7 +20,7 @@ $(function(){
 		  	}).then((result) => {
 	  		    if(result.value){
 	  		    	$.ajax({
-	  			        url: getBasePath() + "/category/delete.html",
+	  			        url: ctx + "category/delete.html",
 	  			        async : true,
 	  			        type: "post",
 	  			        dataType: "json",

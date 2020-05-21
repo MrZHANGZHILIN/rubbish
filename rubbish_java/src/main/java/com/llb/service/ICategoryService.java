@@ -1,5 +1,7 @@
 package com.llb.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.Category;
 
 import java.util.HashMap;
@@ -49,12 +51,9 @@ public interface ICategoryService {
 
     /**
      * 分页查询
-     * @param pageNum
-     * @param pageSize
-     * @param map
      * @return
      */
-    public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map);
+    public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String name);
 
     /**
      * 获取记录数

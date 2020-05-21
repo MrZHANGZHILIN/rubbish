@@ -54,7 +54,7 @@ public class Upload2QiNiu {
      * @param appid
      * @return
      */
-    public String uploadImg(File file, String appid) throws QiniuException {
+    public String uploadFile(File file, String appid) throws QiniuException {
         //给项目文件分空间，全部保存在rubbish目录下
         String filename = "rubbish/"+appid+ "=" + System.currentTimeMillis() +file.getName();
         Response response = null;
@@ -74,9 +74,9 @@ public class Upload2QiNiu {
      * @return
      * @throws QiniuException
      */
-    public String uploadImg(String path, String appid) throws QiniuException {
+    public String uploadFile(String path, String appid) throws QiniuException {
         File file = new File(path);
-        return uploadImg(file, appid);
+        return uploadFile(file, appid);
     }
 
     public static void main(String[] args) throws QiniuException {
@@ -84,7 +84,7 @@ public class Upload2QiNiu {
         String url = "F:\\mysys\\毕业设计-垃圾分类(智能图片识别垃圾分类）\\logo\\logo.png";
         File file = new File(url);
         String base64 = new Base64Util().image2Base64("http://img.liulebin.cn//icon/%E5%86%99%E4%BF%A1.png");
-        String str = upload2Qiniu.uploadImg(file, "liulebin");
+        String str = upload2Qiniu.uploadFile(file, "liulebin");
         System.out.println(str);
     }
 }

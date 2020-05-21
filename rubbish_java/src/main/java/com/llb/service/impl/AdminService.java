@@ -1,5 +1,7 @@
 package com.llb.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.common.PageUtil;
 import com.llb.mapper.AdminMapper;
 import com.llb.entity.Admin;
@@ -46,11 +48,8 @@ public class AdminService implements IAdminService {
 	/**
 	 * 查询
 	 */
-	public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map){
-		if (pageSize > 0) {
-			map.put("pu", new PageUtil<>(pageNum, pageSize));
-		}
-		return this.adminMapper.query(map);
+	public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String loginId){
+		return adminMapper.query(pageParam, loginId);
 	}
 
 	/**

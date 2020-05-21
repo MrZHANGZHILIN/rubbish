@@ -9,7 +9,7 @@ $(function(){
 		})
 	}
 	//删除
-	$(".delete-btn").on("click", function(){
+	$(document).on('click', '.delete-btn', function(){
 		var dbid = $(this).attr("data-dbid");
 		swal({
 	  		  title: '删除垃圾',
@@ -20,7 +20,7 @@ $(function(){
 		  	}).then((result) => {
 	  		    if(result.value){
 	  		    	$.ajax({
-	  			        url: "/rubbish/delete",
+	  			        url: ctx + "rubbish/delete",
 	  			        async : true,
 	  			        type: "post",
 	  			        dataType: "json",
@@ -37,8 +37,8 @@ $(function(){
 	  			        			var pageNo = $(".pagination .current").html();
 	  			        			$(".search-box input[name=p]").val(pageNo);
 	  			        			$(".search-box button[type=submit]").trigger("click");
-	  			        		}, 3000); 
-	  			        		
+	  			        		}, 3000);
+
 	  			        	}else{
 	  			        		showError(data.data);
 	  			        	}
@@ -46,5 +46,5 @@ $(function(){
 	  			    });
 	  		    }
 	    })
-	})
+	});
 });

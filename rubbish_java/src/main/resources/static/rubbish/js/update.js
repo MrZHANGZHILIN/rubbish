@@ -29,7 +29,7 @@ $(function(){
 		data.hot = $.trim($("select[name=hot]").val());
 		data.dbid = $.trim($("input[name=dbid]").val());
 		$.ajax({
-	        url: "/rubbish/update",
+	        url: ctx + "rubbish/update",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -43,7 +43,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/rubbish/list";
+	 	        		location.href = ctx + "rubbish/list";
 	        		}, 3000); 
 	        		
 	        	}else{

@@ -1,5 +1,7 @@
 package com.llb.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.Admin;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,7 +27,7 @@ public interface AdminMapper {
 	/**
 	 * 查询
 	 */
-	public List<HashMap<String, Object>> query(Map<String, Object> map);
+	public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, @Param("loginId") String loginId);
 
 	/**
 	 * 获取记录数

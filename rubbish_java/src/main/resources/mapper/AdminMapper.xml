@@ -33,17 +33,14 @@
 		select * from admin where loginId=#{loginId}
 	</select>
 	<!-- 查询 -->
-	<select id="query" resultType="hashmap">
+	<select id="query" resultType="Map" parameterType="String">
 		select * from admin
 		<where>
 			<if test="loginId != null and loginId != ''">
 				and loginId like concat('%', #{loginId}, '%')
 			</if>
 		</where>
-		order by dbid desc 
-		<if test="pu != null">
-			 limit #{pu.index},#{pu.pageSize}
-	    </if>
+		order by dbid desc
 	</select>
 	<!-- 获取记录数 -->
 	<select id="totalCount" resultType="long">

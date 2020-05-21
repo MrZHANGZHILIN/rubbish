@@ -1,5 +1,7 @@
 package com.llb.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.Rubbish;
 
 import java.util.HashMap;
@@ -52,7 +54,8 @@ public interface IRubbishService {
      * @param map
      * @return
      */
-    public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map);
+//    public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map);
+    IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String name);
 
     /**
      * 总记录数

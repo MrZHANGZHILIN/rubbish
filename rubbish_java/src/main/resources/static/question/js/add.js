@@ -49,7 +49,7 @@ $(function(){
 			return ;
 		}
 		$.ajax({
-	        url: "/question/add",
+	        url: ctx + "question/add",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -63,7 +63,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/question/list";
+	 	        		location.href = ctx + "question/list";
 	        		}, 3000); 
 	        		
 	        	}else{

@@ -1,5 +1,7 @@
 package com.llb.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.Admin;
 
 import java.util.HashMap;
@@ -47,7 +49,7 @@ public interface IAdminService {
      * @param map
      * @return
      */
-    public List<HashMap<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map);
+    public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String loginId);
 
     /**
      * 获取记录数

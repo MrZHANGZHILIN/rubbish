@@ -40,7 +40,7 @@ $(function(){
     	}).then((result) => {
     		  if(result.value){
     			  $.ajax({
-    			        url: "/loginout.html",
+    			        url: ctx + "loginout",
     			        async : true,
     			        type: "post",
     			        dataType: "json",
@@ -49,7 +49,7 @@ $(function(){
     			        		showError(data.data);
     			        		return ;
     			        	}
-    			        	location.href = "/login";
+    			        	location.href = ctx + "login";
     			        }
     		    	});
     		  }

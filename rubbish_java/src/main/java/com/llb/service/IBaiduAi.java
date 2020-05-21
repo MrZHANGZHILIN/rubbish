@@ -30,4 +30,11 @@ public interface IBaiduAi {
      * @return
      */
     ResultInfo<Object> imageRecognition(File image);
+
+    /**
+     * 语音识别
+     * @param voice 语音识别文件
+     * @return
+     */
+    ResultInfo<Object> voiceRecognition(File voice);
 }

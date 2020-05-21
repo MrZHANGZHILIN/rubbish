@@ -13,6 +13,22 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class IndexController extends BaseController{
 	private static final Logger L = Logger.getLogger(IndexController.class);
+
+	/**
+	 * 进入主页
+	 * @return
+	 */
+	@RequestMapping("/")
+	public ModelAndView rubbishIndex(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if(admin == null) {
+			mv.setViewName("/login/login");
+		} else {
+			mv.setViewName("/index/index");
+		}
+		return mv;
+	}
 	/**
 	 * 首页
 	 * 

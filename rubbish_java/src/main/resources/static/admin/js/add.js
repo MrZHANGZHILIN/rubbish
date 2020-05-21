@@ -25,7 +25,7 @@ $(function(){
 			return ;
 		}
 		$.ajax({
-	        url: "/admin/add",
+	        url: ctx + "admin/add",
 	        async : true,
 	        type: "post",
 	        dataType: "json",
@@ -39,7 +39,7 @@ $(function(){
 	 	      			   timer: 3000
 	 	      		    })
 	        		setTimeout(function(){
-	 	        		location.href = "/admin/list";
+	 	        		location.href = ctx + "admin/list";
 	        		}, 3000); 
 	        		
 	        	}else{

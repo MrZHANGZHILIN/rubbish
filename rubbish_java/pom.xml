@@ -180,11 +180,12 @@
       <version>0.1.4</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
 
   <build>
-    <finalName>rubbish_java</finalName>
+    <finalName>rubbish</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
