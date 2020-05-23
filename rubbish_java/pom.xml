@@ -28,6 +28,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+
     </dependency>
     <!--web 支持-->
     <dependency>
@@ -145,6 +146,13 @@
       <groupId>com.baidu.aip</groupId>
       <artifactId>java-sdk</artifactId>
       <version>4.12.0</version>
+      <!--jar包冲突，排除这个slf4j-log4j12-->
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
 <!--    Redis-->

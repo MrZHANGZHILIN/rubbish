@@ -1,11 +1,13 @@
 server:
-  port: 8103
+    port: 8103
+    servlet:
+      context-path: /rubbish
 spring:
   application:
       name: rubbish_java
   datasource:
     druid:
-      url: jdbc:mysql://www.liulebin.cn/rubbish?characterEncoding=utf-8
+      url: jdbc:mysql://39.98.65.221:3306/rubbish?characterEncoding=utf-8
       username: root
       password: nevergiveup?
       initial-size: 1
@@ -18,7 +20,8 @@ spring:
     restart:
       enabled: true
 #  设置静态资源
-  mvc.static-path-pattern: /**
+  mvc:
+    static-path-pattern: /**
   resources.static-locations: classpath:/static/
 
 #邮箱
@@ -40,6 +43,21 @@ spring:
           starttls.enable: true
           socketFactory.port: 465　
           port: 465
+  # Redis 配置
+  redis:
+    database: 0  #数据库索引(默认为0)
+    host: 39.98.65.221
+#    host: 62.234.36.52
+    #  host: www.liulebin.cn
+    port: 6379  #默认链接端口
+    #  password: 123456 #默认为空
+    lettuce:
+      pool:
+        max-active: 8 #最大链接池
+        max-wait: -1 #最大阻赛等待时间（使用负值没有限制）默认为-1
+        max-idle: 8 #连接池中的最大空闲连接 默认 8
+        min-idle: 0
+        timeout: 10000 #连接超时时间
 
 #邮件发件人
 mail:
