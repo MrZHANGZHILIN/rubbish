@@ -1,6 +1,8 @@
 package com.llb.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.User;
 import com.llb.mapper.UserMapper;
 import com.llb.service.IUserService;
@@ -40,8 +42,8 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<Map<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map) {
-        return userMapper.query(map);
+    public IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String name) {
+        return userMapper.query(pageParam, name);
     }
 
     @Override

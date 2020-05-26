@@ -1,5 +1,7 @@
 package com.llb.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.User;
 
 import java.util.List;
@@ -25,8 +27,7 @@ public interface IUserService {
     /**
      * 分页查询
      */
-    List<Map<String, Object>> query(int pageNum, int pageSize, Map<String, Object> map);
-
+    IPage<Map<String, Object>> query(Page<Map<String, Object>> pageParam, String name);
     /**
      * 根据openid查询用户
      * @param openid

@@ -9,10 +9,9 @@
 <link th:href="@{/sweetalert2/dist/sweetalert2.min.css}" rel="stylesheet" >
 <script th:src="@{/sweetalert2/dist/sweetalert2.min.js}"></script>
 <script th:src="@{/js/common.js}" type="text/javascript"></script>
-<script th:src="@{/rubbish/js/list.js}" type="text/javascript"></script>
-    <script th:inline="javascript">
-        var ctx = [[@{/}]]
-    </script>
+<script th:src="@{/user/js/list.js}" type="text/javascript"></script>
+<link th:href="@{/lib/layui/css/layui.css}" rel="stylesheet" >
+<script th:src="@{/js/jquery-2.1.1.min.js}" type="text/javascript"></script>
 </head>
 <body>
 <div class="body-box">
@@ -29,24 +28,88 @@
     </div>
     <div class="table-box">
         <div class="table-head">
-            <span>名称</span>
-            <span>分类</span>
-            <span>热门</span>
+            <span>用户名</span>
+            <span>头像</span>
+            <span>性别</span>
+            <span>国家</span>
+            <span>省份</span>
+            <span>城市</span>
+            <span>注册时间</span>
+            <span>登录时间</span>
+            <span>登出时间</span>
             <span>操作</span>
         </div>
-        <div class="table-body" th:each="item : ${list}">
-            <div class="row">
-                <span th:text="${item.name}">></span>
-                <span th:text="${item.categoryName}">></span>
-                <span th:text="${item.hot}"></span>
-                <span>
-                    <a th:href="@{'/rubbish/updatePage?dbid='+${item.dbid}}">编辑</a>
-                    <a href="javascript:;" class="delete-btn" th:data-dbid="${item.dbid}">删除</a>
-                </span>
-            </div>
-        </div>
+
+        <div class="table-body" id="userList"></div>
+        <!--        分页-->
+        <div id="page"></div>
     </div>
 </div>
+<script th:src="@{/lib/layui/layui.js}" charset="utf-8"></script>
+<script th:inline="javascript">
+    var ctx = [[@{/}]]
+</script>
+<script>
+    layui.use('laypage', function() {
 
+        var laypage = layui.laypage;
+        var name = $("#name").val();
+        //分页
+        laypage.render({
+            elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+            , count: [[${count}]] //数据总数，从服务端得到
+            , limit: 10
+            , limits: [10, 20, 30, 40, 50]
+            , curr: 1                        //起始页
+            , groups: 5                      //连续页码个数
+            , prev: '上一页'                 //上一页文本
+            , next: '下一页'                 //下一页文本
+            , first: 1                      //首页文本
+            , last: '总页数'
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            , jump: function (obj, first) {
+
+                $.ajax({
+                    url: ctx + "user/pageList",
+                    type: "post",
+                    datatype: "json",
+                    data: {name: name, page: obj.curr, limit: obj.limit},
+                    success: function (result) {
+                        var table = document.getElementById('userList');
+                        var html = "";
+                        var item = result.list;
+                        for (var i = 0; i < result.list.length; i++) {
+                            //拼接表格
+                            html += '<div class="row">' +
+                                '<span>'+ item[i].nickname +'</span>' +
+                                '<span>'+ item[i].avatarurl +'</span>' +
+                                '<span>'+ (item[i].gender == 1? "男":"女") +'</span>' +
+                                '<span>'+ item[i].country +'</span>' +
+                                '<span>'+ item[i].province +'</span>' +
+                                '<span>'+ item[i].city +'</span>' +
+                                '<span>'+ item[i].ctime +'</span>' +
+                                '<span>'+ item[i].logintime +'</span>' +
+                                '<span>'+ item[i].logouttime +'</span>' +
+                                '<span>' +
+                                '<a href="/rubbish/user/updatePage?openid= '+ item[i].openid +'">编辑 </a>'+
+                                '<a href="javascript:;" class="delete-btn" data-dbid="'+ item[i].openid +'">删除</a>'+
+                                '</span>'+
+                                '</div>';
+                        }
+
+                        $("#rubbishList").empty();
+                        table.innerHTML = '';
+                        table.innerHTML = html;
+                    },
+                    error: function (response) {
+                        console.log("出错返回: " + response);
+                        console.log("出错数据: " + JSON.stringify(response));
+                    }
+                });
+            }
+        });
+    });
+
+</script>
 </body>
 </html>

@@ -1,20 +1,23 @@
 package com.llb.controller;
 
-import com.llb.common.MD5Util;
-import com.llb.entity.Admin;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.llb.entity.User;
-import com.llb.service.IAdminService;
 import com.llb.service.IUserService;
+import com.llb.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,25 +42,21 @@ public class UserController extends BaseController{
 	@RequestMapping("list")
 	public ModelAndView list(
 			HttpServletRequest request,
-			@RequestParam(value = "openid", required = true) String openid,
-			@RequestParam(value = "p", defaultValue = "1") int pageNO) {
+			@RequestParam(value = "name", defaultValue = "") String name,
+			@RequestParam(defaultValue = "1", required = false, value = "page") Integer page,
+			@RequestParam(defaultValue = "10", required = false, value = "limit") Integer limit) {
 		try {
 			final int pageSize = 10;
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("openid", openid);
-			List<Map<String, Object>> list = userService.query(pageNO, pageSize, params);
-			long totalCount = userService.totalCount(params);
-			
+			params.put("name", name);
 			ModelAndView mv = new ModelAndView("user/list");
-			mv.addObject("pageNo", pageNO);
-			mv.addObject("totalCount", totalCount);
-			mv.addObject("pageSize", pageSize);
-			mv.addObject("domain", this.getDomain(request));
-			mv.addObject("link", "user/list.html");
-			mv.addObject("params", "openid="+openid);
-			
-			mv.addObject("list", list);
-			mv.addObject("openid", openid);
+			//分页操作
+			Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+			IPage<Map<String, Object>> rubbishs = userService.query(pageParam, name);
+
+			mv.addObject("list", rubbishs.getRecords());
+			mv.addObject("count", rubbishs.getTotal());
+			mv.addObject("name", name);
 			return mv;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,6 +64,29 @@ public class UserController extends BaseController{
 		}
 		return null;
 	}
+
+	/**
+	 * 分页操作
+	 * @param name
+	 * @param page
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping("pageList")
+	@ResponseBody
+	public Map<String, Object> pageList(@RequestParam(value = "name", defaultValue = "") String name,
+										@RequestParam(defaultValue = "1", required = true, value = "page") Integer page,
+										@RequestParam(defaultValue = "10", required = true, value = "limit") Integer limit) {
+		Map<String, Object> result = new HashMap<>();
+		//分页操作
+		Page<Map<String, Object>> pageParam = new Page<Map<String, Object>>(page, limit);
+		IPage<Map<String, Object>> users = userService.query(pageParam, name);
+		result.put("count", users.getTotal());
+		result.put("list", users.getRecords());
+		result.put("name", name);
+		return result;
+	}
+
 	/**
 	 * 添加页面
 	 * 
@@ -156,4 +178,28 @@ public class UserController extends BaseController{
 		}
 		return this.fail("修改失败!");
 	}*/
+
+	/**
+	 * 保存用户信息
+	 * @return
+	 */
+	@RequestMapping("/api/saveUser")
+	@ResponseBody
+	public Map<String, Object> saveUser(@RequestBody JSONObject jsonObject) {
+		Map<String, Object> result = new HashMap<>();
+		User user = jsonObject.getObject("user", User.class);
+		user.setOpenid(jsonObject.getString("openId"));
+		User saveUser = userService.findByOpenid(jsonObject.getString("openId"));
+		//判断用户是否登录
+		if(saveUser == null) {
+			user.setCtime(new DateUtil().formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));
+			userService.insert(user);
+		} else {
+			userService.update(user);
+		}
+		result.put("code", 200);
+		result.put("msg", "保存成功");
+		result.put("data", user);
+		return result;
+	}
 }

@@ -35,16 +35,18 @@
 		     )
 	</insert>
 	<!-- 查询 -->
-	<select id="query" resultType="map">
-		select * from wx_user
+	<select id="query" resultType="Map" parameterType="String">
+		select openid,nickname, avatarurl, gender, country, province,
+		city, language , DATE_FORMAT(ctime,'%Y-%m-%d %H:%i:%s') as ctime,
+		DATE_FORMAT(logintime,'%Y-%m-%d %H:%i:%s') as logintime,
+		DATE_FORMAT(logouttime,'%Y-%m-%d %H:%i:%s') as logouttime,
+		phone, count
+		from wx_user
 		<where>
-			<if test="openid != null and openid != ''">
-				and openid = #{openid}
+			<if test="name != null and name != ''">
+				and openid like concat('%', #{name} , '%')
 			</if>
 		</where>
-		<if test="pu != null">
-			limit #{pu.index},#{pu.pageSize}
-		</if>
 	</select>
 	<!-- 修改-->
 	<update id="update">
@@ -68,15 +70,15 @@
 				city = #{city},
 			</if>
 			<if test="language != null">
-				language = #{language},
+				language = #{language}
 			</if>
-			<if test="phone != null">
+			<if test="phone != null and phone != ''">
 				phone = #{phone},
 			</if>
-			<if test="loginTime != null">
+			<if test="loginTime != null and loginTime != ''">
 				logintime = #{loginTime},
 			</if>
-			<if test="logoutTime != null">
+			<if test="logoutTime != null and logoutTime != ''">
 				logouttime = #{logoutTime},
 			</if>
 		    where openid = #{openid}
