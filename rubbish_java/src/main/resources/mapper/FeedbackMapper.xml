@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.llb.mapper.FeedbackMapper">
+    <!-- 插入 -->
+    <insert id="insertFeedBack" parameterType="FeedBack">
+		insert into feedback(
+		     feed_id,
+		     openId,
+		     content,
+		     email,
+		     imgurl1,
+		     imgurl2,
+		     imgurl3,
+		     imgurl4,
+		     create_date
+		     )
+		values (
+		     #{feedId},
+		     #{openId},
+		     #{content},
+		     #{email},
+		     #{imgurl1},
+		     #{imgurl2},
+		     #{imgurl3},
+		     #{imgurl4},
+		     #{createDate}
+		     )
+	</insert>
+</mapper>

@@ -1,9 +1,12 @@
 package com.llb.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.llb.entity.Feedback;
 import com.llb.entity.User;
+import com.llb.service.IFeedbackService;
 import com.llb.service.IUserService;
 import com.llb.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -17,10 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户管理
@@ -33,6 +33,8 @@ public class UserController extends BaseController{
 	private static final Logger L = Logger.getLogger(UserController.class);
 	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IFeedbackService feedbackService;
 	
 	/**
 	 * 首页
@@ -200,6 +202,58 @@ public class UserController extends BaseController{
 		result.put("code", 200);
 		result.put("msg", "保存成功");
 		result.put("data", user);
+		return result;
+	}
+
+	/**
+	 * 用户反馈
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping(value = "/api/feedBack")
+	@ResponseBody
+	public Map<String, Object> feedBack(@RequestBody Map<String, Object> map) {
+		Map<String, Object> result = new HashMap<>();
+		//补全反馈信息
+		Feedback feedback = new Feedback();
+		feedback.setFeedId(UUID.randomUUID().toString().replace("-", ""));
+		feedback.setOpenId((String) map.get("openid"));
+		feedback.setContent((String) map.get("detail"));
+		feedback.setEmail((String) map.get("email"));
+		feedback.setImgurl1((String) map.get("email"));
+		if(!"".equals(map.get("imgList"))) {
+			List<String> imgList = (List<String>) map.get("imgList");
+
+			//TODO:好烂好烂好烂！！！
+			if (imgList.size() == 4) {
+				feedback.setImgurl1(imgList.get(0));
+				feedback.setImgurl2(imgList.get(1));
+				feedback.setImgurl3(imgList.get(2));
+				feedback.setImgurl4(imgList.get(3));
+			} else if(imgList.size() == 3) {
+				feedback.setImgurl1(imgList.get(0));
+				feedback.setImgurl2(imgList.get(1));
+				feedback.setImgurl3(imgList.get(2));
+			} else if(imgList.size() == 2){
+				feedback.setImgurl1(imgList.get(0));
+				feedback.setImgurl2(imgList.get(1));
+			} else if(imgList.size() == 1){
+				feedback.setImgurl1(imgList.get(0));
+			}
+		} else {
+		}
+		feedback.setCreateDate(new DateUtil().formatDate(new Date(), "yyyy-MM-dd hh:mm:ss"));
+		//保存
+		try {
+			feedbackService.insert(feedback);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", 500);
+			result.put("msg", e);
+			return result;
+		}
+		result.put("code", 200);
+		result.put("msg", "反馈成功！");
 		return result;
 	}
 }
